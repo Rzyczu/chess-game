@@ -20,7 +20,7 @@ namespace chess.Pieces
             }
 
             int deltaX = end.X - start.X;
-            int deltaY = end.Y - start.Y;
+            int deltaY = Math.Abs(end.Y - start.Y);
 
             if (Player.Color == ColorType.White)
             {

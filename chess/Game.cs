@@ -2,7 +2,7 @@
 using chess;
 using chess.Enums;
 
-public class ChessGame
+public class Game
 {
     private GameBoard board;
     private Player player1;
@@ -10,7 +10,7 @@ public class ChessGame
     private List<Turn> turnsHistory;
     private Turn currentTurn;
 
-    public ChessGame()
+    public Game()
     {
         // Initialize players
         player1 = new Player(ColorType.White);
@@ -65,7 +65,8 @@ public class ChessGame
 
     public void StartGame()
     {
-        Console.WriteLine("Welcome! Starting new game of chess...");
+        Console.WriteLine("Welcome! Starting new game of chess...\n\n\n");
+        Console.WriteLine($"Turn: {currentTurn.Number}\n");
         PrintBoard();
         PlayGame();
     }
@@ -78,6 +79,8 @@ public class ChessGame
             // Execute player's turn
             ExecuteTurn();
             // Print current board state
+            Console.WriteLine($"\n------------------------------------------\n");
+            Console.WriteLine($"Turn: {currentTurn.Number}\n");
             PrintBoard();
             // Check if game over condition is met
             if (IsGameOver())
@@ -91,7 +94,7 @@ public class ChessGame
 
     private void ExecuteTurn()
     {
-        Console.WriteLine($"\nPlayer {currentTurn.Player.Color}'s turn");
+        Console.WriteLine($"\nPlayer {currentTurn.Player.Color}'s turn\n");
 
         MakeMove();
         UpdateTurn();
@@ -314,8 +317,10 @@ public class ChessGame
         Console.Write("   "); // Empty space for alignment
         for (int col = 0; col < board.Width; col++)
         {
+
+            Console.ForegroundColor = darkSquareColor;
             char columnLabel = (char)('A' + col); // Convert column index to letter (A, B, C, ...)
-            Console.Write(columnLabel.ToString().PadRight(3));
+            Console.Write(columnLabel.ToString().PadLeft(2).PadRight(3));
         }
         Console.WriteLine(); // Move to the next line after printing column headers
 
@@ -323,6 +328,7 @@ public class ChessGame
         for (int row = 0; row < board.Height; row++)
         {
             // Print row number
+            Console.ForegroundColor = darkSquareColor;
             Console.Write((row + 1).ToString().PadLeft(2) + " "); // Pad left to align with column labels
 
             // Alternate between dark and light squares for each row
@@ -368,6 +374,6 @@ public class ChessGame
         Console.WriteLine("Printing game result...");
     }
 
-   
-   
+
+
 }
