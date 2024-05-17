@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\chess"
   ],
-  "SelectedNode": "\\uml.drawio",
+  "SelectedNode": "\\chess\\Game.cs",
   "PreviewInSolutionExplorer": false
 }

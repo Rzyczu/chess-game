@@ -1,0 +1,15 @@
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\chess.csproj.AssemblyReference.cache
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\chess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\chess.AssemblyInfoInputs.cache
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\chess.AssemblyInfo.cs
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\chess.csproj.CoreCompileInputs.cache
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\bin\Debug\net7.0\chess.exe
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\bin\Debug\net7.0\chess.deps.json
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\bin\Debug\net7.0\chess.runtimeconfig.json
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\bin\Debug\net7.0\chess.dll
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\bin\Debug\net7.0\chess.pdb
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\chess.dll
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\refint\chess.dll
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\chess.pdb
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\chess.genruntimeconfig.cache
+C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\ref\chess.dll
