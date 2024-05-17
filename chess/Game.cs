@@ -65,7 +65,7 @@ public class ChessGame
 
     public void StartGame()
     {
-        Console.WriteLine("Starting new game of chess...");
+        Console.WriteLine("Welcome! Starting new game of chess...");
         PrintBoard();
         PlayGame();
     }
@@ -91,7 +91,7 @@ public class ChessGame
 
     private void ExecuteTurn()
     {
-        Console.WriteLine($"Player {currentTurn.Player.Color}'s turn");
+        Console.WriteLine($"\nPlayer {currentTurn.Player.Color}'s turn");
 
         MakeMove();
         UpdateTurn();
@@ -105,7 +105,7 @@ public class ChessGame
 
         if (moveParts.Length != 2)
         {
-            Console.WriteLine("Invalid move format. Please enter a move in the format 'startPosition endPosition'.");
+            Console.WriteLine("Invalid move format.");
             MakeMove(); // Retry move
             return;
         }
@@ -141,8 +141,6 @@ public class ChessGame
         }
 
         // Placeholder for other move-related logic (e.g., check for checkmate)
-
-        Console.WriteLine("Move executed successfully.");
     }
 
     private void HandleCastling(Coordinates startCoord, Coordinates endCoord)
@@ -182,8 +180,6 @@ public class ChessGame
         board.AddPiece(king, endCoord);
         king.Coordinates = endCoord;
         ((King)king).IsMoved = true;
-
-        Console.WriteLine("Castling executed successfully.");
     }
 
 
