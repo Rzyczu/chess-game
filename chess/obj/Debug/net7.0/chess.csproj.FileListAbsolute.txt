@@ -13,3 +13,18 @@ C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolsk
 C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\chess.pdb
 C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\chess.genruntimeconfig.cache
 C:\Users\milos\OneDrive - Związek Harcerstwa Rzeczypospolitej Okręg Małopolski\Pulpit\playground_w\chess\obj\Debug\net7.0\ref\chess.dll
+C:\repos\chess\chess\bin\Debug\net7.0\chess.exe
+C:\repos\chess\chess\bin\Debug\net7.0\chess.deps.json
+C:\repos\chess\chess\bin\Debug\net7.0\chess.runtimeconfig.json
+C:\repos\chess\chess\bin\Debug\net7.0\chess.dll
+C:\repos\chess\chess\bin\Debug\net7.0\chess.pdb
+C:\repos\chess\chess\obj\Debug\net7.0\chess.csproj.AssemblyReference.cache
+C:\repos\chess\chess\obj\Debug\net7.0\chess.GeneratedMSBuildEditorConfig.editorconfig
+C:\repos\chess\chess\obj\Debug\net7.0\chess.AssemblyInfoInputs.cache
+C:\repos\chess\chess\obj\Debug\net7.0\chess.AssemblyInfo.cs
+C:\repos\chess\chess\obj\Debug\net7.0\chess.csproj.CoreCompileInputs.cache
+C:\repos\chess\chess\obj\Debug\net7.0\chess.dll
+C:\repos\chess\chess\obj\Debug\net7.0\refint\chess.dll
+C:\repos\chess\chess\obj\Debug\net7.0\chess.pdb
+C:\repos\chess\chess\obj\Debug\net7.0\chess.genruntimeconfig.cache
+C:\repos\chess\chess\obj\Debug\net7.0\ref\chess.dll

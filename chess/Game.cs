@@ -216,7 +216,7 @@ public class ChessGame
 
     private Coordinates AlgebraicToCoordinates(string algebraicNotation)
     {
-        int row = 8 - (algebraicNotation[1] - '1');
+        int row = algebraicNotation[1] - '1';
         int col = algebraicNotation[0] - 'a';
         return new Coordinates(row, col);
     }

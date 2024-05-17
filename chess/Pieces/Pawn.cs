@@ -20,7 +20,7 @@ namespace chess.Pieces
             }
 
             int deltaX = end.X - start.X;
-            int deltaY = Math.Abs(end.Y - start.Y);
+            int deltaY = end.Y - start.Y;
 
             if (Player.Color == ColorType.White)
             {
@@ -36,15 +36,15 @@ namespace chess.Pieces
 
         private bool IsValidWhitePawnMove(int deltaX, int deltaY, Coordinates start, Coordinates end, GameBoard board)
         {
-            if (deltaX == -1 && deltaY == 0 && board.GetPieceAt(end) == null)
+            if (deltaX == 1 && deltaY == 0 && board.GetPieceAt(end) == null)
             {
                 return true; // Move one square forward
             }
-            if (deltaX == -2 && deltaY == 0 && start.X == 6 && board.GetPieceAt(end) == null && board.GetPieceAt(new Coordinates(5, end.Y)) == null)
+            if (deltaX == 2 && deltaY == 0  && board.GetPieceAt(end) == null && !IsMoved)
             {
                 return true; // Move two squares forward from the initial position
             }
-            if (deltaX == -1 && deltaY == 1 && board.GetPieceAt(end) != null && board.GetPieceAt(end).Player.Color == ColorType.Black)
+            if (deltaX == 1 && deltaY == 1 && board.GetPieceAt(end) != null && board.GetPieceAt(end).Player.Color == ColorType.Black)
             {
                 return true; // Capture diagonally
             }
@@ -53,15 +53,15 @@ namespace chess.Pieces
 
         private bool IsValidBlackPawnMove(int deltaX, int deltaY, Coordinates start, Coordinates end, GameBoard board)
         {
-            if (deltaX == 1 && deltaY == 0 && board.GetPieceAt(end) == null)
+            if (deltaX == -1 && deltaY == 0 && board.GetPieceAt(end) == null)
             {
                 return true; // Move one square forward
             }
-            if (deltaX == 2 && deltaY == 0 && start.X == 1 && board.GetPieceAt(end) == null && board.GetPieceAt(new Coordinates(2, end.Y)) == null)
+            if (deltaX == -2 && deltaY == 0 && board.GetPieceAt(end) == null && !IsMoved)
             {
                 return true; // Move two squares forward from the initial position
             }
-            if (deltaX == 1 && deltaY == 1 && board.GetPieceAt(end) != null && board.GetPieceAt(end).Player.Color == ColorType.White)
+            if (deltaX == -1 && deltaY == 1 && board.GetPieceAt(end) != null && board.GetPieceAt(end).Player.Color == ColorType.White)
             {
                 return true; // Capture diagonally
             }
