@@ -38,12 +38,12 @@ namespace chess
             }
         }
 
-        public Piece GetPieceAt(Coordinates position)
+        public Piece? GetPieceAt(Coordinates position)
         {
             if (IsWithinBounds(position))
                 return BoardArray[position.X, position.Y];
             else
-                throw new ArgumentException("Position is out of bounds.");
+                return null;
         }
 
         public void RemovePieceAt(Coordinates position)

@@ -1,6 +1,7 @@
 ﻿using chess.Pieces;
 using chess;
 using chess.Enums;
+using System.Runtime.CompilerServices;
 
 public class Game
 {
@@ -121,6 +122,13 @@ public class Game
         Coordinates endCoord = AlgebraicToCoordinates(endPosition);
         Piece pieceAtStart = board.GetPieceAt(startCoord);
 
+        if (pieceAtStart == null)
+        {
+            Console.WriteLine("Position is out of bounds.");
+            MakeMove(); // Retry move
+            return;
+        }
+
         Move move = new Move(startCoord, endCoord, pieceAtStart, null); // PieceCaptured is null for now
 
         // Validate move
@@ -194,10 +202,21 @@ public class Game
 
         // Check if a piece is being captured
         Piece pieceAtEnd = board.GetPieceAt(end);
+
         if (pieceAtEnd != null && pieceAtEnd.Player != pieceAtStart.Player)
         {
+            board.RemovePieceAt(end);
             // Increment the capturing player's score
             currentTurn.Player.Score++;
+        }
+
+        if (pieceAtStart.Type == PieceType.Pawn)
+        {
+            if (!((Pawn)pieceAtStart).IsMoved)
+            {
+                ((Pawn)pieceAtStart).IsMoved = true;
+            }
+
         }
 
         // Move the piece to the new position
@@ -222,33 +241,32 @@ public class Game
 
     private void UpdateTurn()
     {
-        currentTurn = new Turn(currentTurn.Number++, (currentTurn.Player == player1) ? player2 : player1);
+        currentTurn = new Turn(currentTurn.Number + 1, (currentTurn.Player == player1) ? player2 : player1);
     }
 
     // Placeholder for move validation logic
     private bool IsValidMove(Move move)
     {
-        // Get the piece being moved
         Piece piece = move.PiecePlayed;
 
         // Check if the start position contains a piece belonging to the current player
         if (piece == null || piece.Player != currentTurn.Player)
         {
+            Console.WriteLine($"Start position doesn't contain {currentTurn.Player.Color} piece.");
             return false; // Invalid move if the start position doesn't contain the player's piece
         }
 
-        // Get start and end positions from the move
         Coordinates start = move.StartPosition;
         Coordinates end = move.EndPosition;
 
-        // Check if the end position is within the bounds of the board
-        if (!IsWithinBoardBounds(end))
-        {
-            return false; // Invalid move if the end position is outside the board
-        }
-
         // Check if the end position is empty or contains an opponent's piece (if capturing)
         Piece pieceAtEnd = board.GetPieceAt(end);
+        if (piece == null)
+        {
+            Console.WriteLine("Position is out of bounds.");
+            return false;
+        }
+
         if (pieceAtEnd != null && pieceAtEnd.Player == currentTurn.Player)
         {
             return false; // Invalid move if the end position contains the player's own piece
@@ -263,10 +281,9 @@ public class Game
         // Check if the piece is not a knight and the path between start and end positions is clear of other pieces
         if (!(piece is Knight) && !IsPathClear(start, end, board))
         {
+            Console.WriteLine("Patch isn't clear.");
             return false; // Invalid move if there are pieces blocking the path
         }
-
-        // Additional conditions can be added here as needed
 
         return true; // Move is valid if all conditions pass
     }
@@ -292,11 +309,6 @@ public class Game
         }
 
         return true; // Path is clear
-    }
-
-    private bool IsWithinBoardBounds(Coordinates position)
-    {
-        return position.X >= 0 && position.X < board.Height && position.Y >= 0 && position.Y < board.Width;
     }
 
     private bool IsGameOver()
