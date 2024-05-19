@@ -25,7 +25,7 @@ namespace chess.Pieces
                 return true;
             }
             // King can castling
-            if (deltaY == 2)
+            if (deltaX == 2)
             {
                 return true;
             }

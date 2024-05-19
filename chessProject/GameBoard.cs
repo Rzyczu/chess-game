@@ -13,11 +13,11 @@ namespace chess
         public List<Piece> WhitePieces { get; } = new List<Piece>();
         public List<Piece> BlackPieces { get; } = new List<Piece>();
 
-        public GameBoard(int height, int width)
+        public GameBoard(int width, int height)
         {
             Height = height;
             Width = width;
-            BoardArray = new Piece[height, width];
+            BoardArray = new Piece[width, height];
         }
 
 
@@ -26,7 +26,7 @@ namespace chess
             if (IsWithinBounds(position))
             {
                 piece.Coordinates = position;
-                BoardArray[position.X, position.Y] = piece;
+                BoardArray[position.X, position.Y] = piece; // Updated indexing
                 if (piece.Player.Color == ColorType.White)
                     WhitePieces.Add(piece);
                 else
@@ -41,7 +41,7 @@ namespace chess
         public Piece? GetPieceAt(Coordinates position)
         {
             if (IsWithinBounds(position))
-                return BoardArray[position.X, position.Y];
+                return BoardArray[position.X, position.Y]; // Updated indexing
             else
                 return null;
         }
@@ -50,14 +50,14 @@ namespace chess
         {
             if (IsWithinBounds(position))
             {
-                Piece pieceToRemove = BoardArray[position.X, position.Y];
+                Piece pieceToRemove = BoardArray[position.Y, position.X]; // Updated indexing
                 if (pieceToRemove != null)
                 {
                     if (pieceToRemove.Player.Color == ColorType.White)
                         WhitePieces.Remove(pieceToRemove);
                     else
                         BlackPieces.Remove(pieceToRemove);
-                    BoardArray[position.X, position.Y] = null;
+                    BoardArray[position.X, position.Y] = null; // Updated indexing
                 }
             }
             else
@@ -74,7 +74,7 @@ namespace chess
 
         public bool IsWithinBounds(Coordinates position)
         {
-            return position.X >= 0 && position.X < Width && position.Y >= 0 && position.Y < Height;
+            return position.X >= 0 && position.X < Width && position.Y >= 0 && position.Y < Height; // Updated conditions
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using chess;
+﻿using chess.Pieces;
+using chess;
 using chess.Enums;
-using chess.Pieces;
+using System.Runtime.CompilerServices;
 
 public class Game
 {
@@ -25,28 +26,28 @@ public class Game
         PlacePiecesForPlayer(player1, 0);
         PlacePiecesForPlayer(player2, 7);
 
-        for (int col = 0; col < board.Width; col++)
+        for (int row = 0; row < board.Width; row++)
         {
-            board.AddPiece(new Pawn(new Coordinates(1, col), player1), new Coordinates(1, col));
-            board.AddPiece(new Pawn(new Coordinates(board.Height - 2, col), player2), new Coordinates(6, col));
+            board.AddPiece(new Pawn(new Coordinates(row, 1), player1), new Coordinates(row, 1));
+            board.AddPiece(new Pawn(new Coordinates(row, board.Height - 2), player2), new Coordinates(row, 6));
         }
     }
 
-    private void PlacePiecesForPlayer(Player player, int row)
+    private void PlacePiecesForPlayer(Player player, int col)
     {
         // Place Rooks
-        board.AddPiece(new Rook(new Coordinates(row, 0), player), new Coordinates(row, 0));
-        board.AddPiece(new Rook(new Coordinates(row, 7), player), new Coordinates(row, 7));
+        board.AddPiece(new Rook(new Coordinates(0, col), player), new Coordinates(0, col));
+        board.AddPiece(new Rook(new Coordinates(7, col), player), new Coordinates(7, col));
         // Place Knights
-        board.AddPiece(new Knight(new Coordinates(row, 1), player), new Coordinates(row, 1));
-        board.AddPiece(new Knight(new Coordinates(row, 6), player), new Coordinates(row, 6));
+        board.AddPiece(new Knight(new Coordinates(1, col), player), new Coordinates(1, col));
+        board.AddPiece(new Knight(new Coordinates(6, col), player), new Coordinates(6, col));
         // Place Bishops
-        board.AddPiece(new Bishop(new Coordinates(row, 2), player), new Coordinates(row, 2));
-        board.AddPiece(new Bishop(new Coordinates(row, 5), player), new Coordinates(row, 5));
+        board.AddPiece(new Bishop(new Coordinates(2, col), player), new Coordinates(2, col));
+        board.AddPiece(new Bishop(new Coordinates(5, col), player), new Coordinates(5, col));
         // Place Queen
-        board.AddPiece(new Queen(new Coordinates(row, 3), player), new Coordinates(row, 3));
+        board.AddPiece(new Queen(new Coordinates(3, col), player), new Coordinates(3, col));
         // Place King
-        board.AddPiece(new King(new Coordinates(row, 4), player), new Coordinates(row, 4));
+        board.AddPiece(new King(new Coordinates(4, col), player), new Coordinates(4, col));
     }
 
     public void StartGame()
@@ -127,7 +128,7 @@ public class Game
         currentTurn.Move = move;
 
         // Check for castling
-        if (pieceAtStart is King && Math.Abs(start.Y - end.Y) == 2)
+        if (pieceAtStart is King && Math.Abs(start.X - end.X) == 2)
         {
             if (IsValidCastling(move))
             {
@@ -156,10 +157,10 @@ public class Game
         Coordinates end = move.EndPosition;
         Piece king = move.PiecePlayed;
 
-        int deltaY = Math.Sign(end.Y - start.Y);
-        int rookY = end.Y + (deltaY == 1 ? 1 : (deltaY == -1 ? -2 : 0));
+        int deltaX = Math.Sign(end.X - start.X);
+        int rookX = end.X + (deltaX == 1 ? 1 : (deltaX == -1 ? -2 : 0));
 
-        Piece rook = board.GetPieceAt(new Coordinates(start.X, rookY));
+        Piece rook = board.GetPieceAt(new Coordinates(rookX, start.Y));
 
         // Check if both the king and the rook haven't moved
         if (!(king is King kingPiece && !kingPiece.IsMoved) || !(rook is Rook rookPiece && !rookPiece.IsMoved))
@@ -169,10 +170,10 @@ public class Game
         }
 
         // Check if there are any pieces between the king and the rook
-        int rookEndY = rookY - deltaY;
-        for (int col = Math.Min(start.Y, rookEndY) + 1; col < Math.Max(start.Y, rookEndY); col++)
+        int rookEndX = rookX - deltaX;
+        for (int row = Math.Min(start.X, rookEndX) + 1; row < Math.Max(start.X, rookEndX); row++)
         {
-            if (board.GetPieceAt(new Coordinates(start.X, col)) != null)
+            if (board.GetPieceAt(new Coordinates(row, start.Y)) != null)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(ErrorMessages.CastlingPacthError);
@@ -190,20 +191,19 @@ public class Game
         Coordinates start = move.StartPosition;
         Coordinates end = move.EndPosition;
         Piece king = move.PiecePlayed;
-        int deltaY = Math.Sign(end.Y - start.Y);
-        int rookY = end.Y + (deltaY == 1 ? 1 : (deltaY == -1 ? -2 : 0));
+        int deltaX = Math.Sign(end.X - start.X);
+        int rookX = end.X + (deltaX == 1 ? 1 : (deltaX == -1 ? -2 : 0));
 
-        Piece rook = board.GetPieceAt(new Coordinates(start.X, rookY));
-        int rookEndY = rookY - deltaY;
+        Piece rook = board.GetPieceAt(new Coordinates(rookX, start.Y));
+        int rookEndX = rookX - deltaX;
 
         // Move the rook
-        Coordinates rookStart = new Coordinates(start.X, (end.Y == 6) ? 7 : 0);
-        Coordinates rookEnd = new Coordinates(start.X, rookEndY);
+        Coordinates rookStart = new Coordinates((end.X == 6) ? 7 : 0, start.Y);
+        Coordinates rookEnd = new Coordinates(rookEndX, start.Y);
         board.RemovePieceAt(rookStart);
         board.AddPiece(rook, rookEnd);
         rook.Coordinates = rookEnd;
         ((Rook)rook).IsMoved = true;
-
         // Move the king
         board.RemovePieceAt(start);
         board.AddPiece(king, end);
@@ -212,8 +212,6 @@ public class Game
 
         turnsHistory.Add(currentTurn);
     }
-
-
 
     private void ExecuteMove(Move move)
     {
@@ -259,12 +257,10 @@ public class Game
         turnsHistory.Add(currentTurn);
     }
 
-
-
     private Coordinates AlgebraicToCoordinates(string algebraicNotation)
     {
-        int row = algebraicNotation[1] - '1';
-        int col = algebraicNotation[0] - 'a';
+        int row = algebraicNotation[0] - 'a';
+        int col = algebraicNotation[1] - '1';
         return new Coordinates(row, col);
     }
 
@@ -360,7 +356,7 @@ public class Game
             {
                 Console.BackgroundColor = squareColor;
 
-                Piece piece = board.GetPieceAt(new Coordinates(row, col));
+                Piece piece = board.GetPieceAt(new Coordinates(col, row));
                 if (piece != null)
                 {
                     ConsoleColor pieceColor = (piece.Player.Color == ColorType.White) ? whiteColor : blackColor;
