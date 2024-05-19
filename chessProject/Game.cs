@@ -1,7 +1,6 @@
-﻿using chess.Pieces;
-using chess;
+﻿using chess;
 using chess.Enums;
-using System.Runtime.CompilerServices;
+using chess.Pieces;
 
 public class Game
 {
@@ -28,8 +27,8 @@ public class Game
 
         for (int col = 0; col < board.Width; col++)
         {
-            board.AddPiece(new Pawn(new Coordinates(board.Height + 1, col), player1), new Coordinates(1, col));
-            board.AddPiece(new Pawn(new Coordinates(board.Height - 1, col), player2), new Coordinates(6, col));
+            board.AddPiece(new Pawn(new Coordinates(1, col), player1), new Coordinates(1, col));
+            board.AddPiece(new Pawn(new Coordinates(board.Height - 2, col), player2), new Coordinates(6, col));
         }
     }
 
