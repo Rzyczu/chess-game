@@ -6,7 +6,7 @@ namespace chess.Pieces
     {
         public bool IsMoved { get; set; }
 
-        public Rook(Coordinates coordinates, Player player) : base(coordinates, player, PieceType.Rock)
+        public Rook(Coordinates coordinates, Player player) : base(coordinates, player, PieceType.Rook)
         {
             IsMoved = false;
         }

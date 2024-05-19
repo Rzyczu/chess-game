@@ -2,8 +2,8 @@
 {
     public class Coordinates
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int X { get; set; } //row
+        public int Y { get; set; } //column
 
         public Coordinates(int x, int y)
         {

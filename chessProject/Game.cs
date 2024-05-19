@@ -34,12 +34,12 @@ public class Game
     {
         // Set up white pieces
         board.AddPiece(new Rook(new Coordinates(0, 0), player1), new Coordinates(0, 0));
-        board.AddPiece(new Knight(new Coordinates(0, 1), player1), new Coordinates(0, 1));
-        board.AddPiece(new Bishop(new Coordinates(0, 2), player1), new Coordinates(0, 2));
-        board.AddPiece(new Queen(new Coordinates(0, 3), player1), new Coordinates(0, 3));
+        //board.AddPiece(new Knight(new Coordinates(0, 1), player1), new Coordinates(0, 1));
+        //board.AddPiece(new Bishop(new Coordinates(0, 2), player1), new Coordinates(0, 2));
+        //board.AddPiece(new Queen(new Coordinates(0, 3), player1), new Coordinates(0, 3));
         board.AddPiece(new King(new Coordinates(0, 4), player1), new Coordinates(0, 4));
-        board.AddPiece(new Bishop(new Coordinates(0, 5), player1), new Coordinates(0, 5));
-        board.AddPiece(new Knight(new Coordinates(0, 6), player1), new Coordinates(0, 6));
+        //board.AddPiece(new Bishop(new Coordinates(0, 5), player1), new Coordinates(0, 5));
+        //board.AddPiece(new Knight(new Coordinates(0, 6), player1), new Coordinates(0, 6));
         board.AddPiece(new Rook(new Coordinates(0, 7), player1), new Coordinates(0, 7));
 
         for (int i = 0; i < 8; i++)
@@ -49,12 +49,12 @@ public class Game
 
         // Set up black pieces
         board.AddPiece(new Rook(new Coordinates(7, 0), player2), new Coordinates(7, 0));
-        board.AddPiece(new Knight(new Coordinates(7, 1), player2), new Coordinates(7, 1));
-        board.AddPiece(new Bishop(new Coordinates(7, 2), player2), new Coordinates(7, 2));
-        board.AddPiece(new Queen(new Coordinates(7, 3), player2), new Coordinates(7, 3));
+        //board.AddPiece(new Knight(new Coordinates(7, 1), player2), new Coordinates(7, 1));
+        //board.AddPiece(new Bishop(new Coordinates(7, 2), player2), new Coordinates(7, 2));
+        //board.AddPiece(new Queen(new Coordinates(7, 3), player2), new Coordinates(7, 3));
         board.AddPiece(new King(new Coordinates(7, 4), player2), new Coordinates(7, 4));
-        board.AddPiece(new Bishop(new Coordinates(7, 5), player2), new Coordinates(7, 5));
-        board.AddPiece(new Knight(new Coordinates(7, 6), player2), new Coordinates(7, 6));
+        //board.AddPiece(new Bishop(new Coordinates(7, 5), player2), new Coordinates(7, 5));
+        //board.AddPiece(new Knight(new Coordinates(7, 6), player2), new Coordinates(7, 6));
         board.AddPiece(new Rook(new Coordinates(7, 7), player2), new Coordinates(7, 7));
 
         for (int i = 0; i < 8; i++)
@@ -74,20 +74,15 @@ public class Game
 
     private void PlayGame()
     {
-        // Placeholder for game loop
         while (!IsGameOver())
         {
-            // Execute player's turn
             ExecuteTurn();
-            // Print current board state
             Console.WriteLine($"\n------------------------------------------\n");
             Console.WriteLine($"Turn: {currentTurn.Number}\n");
             PrintBoard();
-            // Check if game over condition is met
             if (IsGameOver())
             {
                 Console.WriteLine("Game over!");
-                // Print winner or draw
                 PrintResult();
             }
         }
@@ -109,7 +104,7 @@ public class Game
 
         if (moveParts.Length != 2)
         {
-            Console.WriteLine("Invalid move format.");
+            Console.WriteLine(ErrorMessages.MoveFormatInputError);
             MakeMove(); // Retry move
             return;
         }
@@ -118,82 +113,116 @@ public class Game
         string endPosition = moveParts[1];
 
         // Convert algebraic notation to board coordinates (e.g., 'e2' -> (1, 4))
-        Coordinates startCoord = AlgebraicToCoordinates(startPosition);
-        Coordinates endCoord = AlgebraicToCoordinates(endPosition);
+        Coordinates start = AlgebraicToCoordinates(startPosition);
+        Coordinates end = AlgebraicToCoordinates(endPosition);
 
-        if (!board.IsWithinBounds(startCoord) || !board.IsWithinBounds(endCoord))
+        if (!board.IsWithinBounds(start) || !board.IsWithinBounds(end))
         {
-            Console.WriteLine("Position is out of bounds.");
+            Console.WriteLine(ErrorMessages.WithinBoundError);
             MakeMove(); // Retry move
             return;
         }
 
-        Piece pieceAtStart = board.GetPieceAt(startCoord);
+        Piece pieceAtStart = board.GetPieceAt(start);
 
         if (pieceAtStart == null)
         {
-            Console.WriteLine("No piece at start position.");
+            Console.WriteLine(ErrorMessages.PieceStartError);
             MakeMove(); // Retry move
             return;
         }
 
-        Move move = new Move(startCoord, endCoord, pieceAtStart, null);
+        Move move = new Move(start, end, pieceAtStart, null);
         if (!IsValidMove(move))
         {
-            Console.WriteLine("Invalid move. Please try again.");
+            Console.WriteLine(ErrorMessages.InvalidMoveError);
             MakeMove(); // Retry move
             return;
         }
 
         currentTurn.Move = move;
-        ExecuteMove(move);
 
         // Check for castling
-        if (pieceAtStart is King && Math.Abs(startCoord.Y - endCoord.Y) == 2)
+        if (pieceAtStart is King && Math.Abs(start.Y - end.Y) == 2)
         {
-            // Castling
-            HandleCastling(startCoord, endCoord);
-        }
-    }
-
-    private void HandleCastling(Coordinates startCoord, Coordinates endCoord)
-    {
-        // Get the pieces
-        Piece king = board.GetPieceAt(startCoord);
-        Piece rook = board.GetPieceAt(new Coordinates(startCoord.X, (endCoord.Y == 6) ? 7 : 0)); // Determine rook's start position
-
-        // Check if both the king and the rook haven't moved
-        if (!(king is King kingPiece && !kingPiece.IsMoved) || !(rook is Rook rookPiece && !rookPiece.IsMoved))
-        {
-            Console.WriteLine("Invalid castling: King or rook has already moved.");
-            return;
-        }
-
-        // Check if there are any pieces between the king and the rook
-        int rookEndY = (endCoord.Y == 6) ? 5 : 3;
-        for (int col = Math.Min(startCoord.Y, rookEndY) + 1; col < Math.Max(startCoord.Y, rookEndY); col++)
-        {
-            if (board.GetPieceAt(new Coordinates(startCoord.X, col)) != null)
+            if (IsValidCastling(move))
             {
-                Console.WriteLine("Invalid castling: Pieces obstruct the path.");
+                HandleCastling(move);
+            }
+            else
+            {
+                MakeMove(); // Retry move
                 return;
             }
         }
 
+        ExecuteMove(move);
+    }
+
+    private bool IsValidCastling(Move move)
+    {
+
+        Coordinates start = move.StartPosition;
+        Coordinates end = move.EndPosition;
+        Piece king = move.PiecePlayed;
+
+        int deltaY = Math.Sign(end.Y - start.Y);
+        int rookY = end.Y + (deltaY == 1 ? 1 : (deltaY == -1 ? -2 : 0));
+
+        Piece rook = board.GetPieceAt(new Coordinates(start.X, rookY));
+
+        // Check if both the king and the rook haven't moved
+        if (!(king is King kingPiece && !kingPiece.IsMoved) || !(rook is Rook rookPiece && !rookPiece.IsMoved))
+        {
+            Console.WriteLine(ErrorMessages.CatlingPieceMovedError);
+            return false;
+        }
+
+        // Check if there are any pieces between the king and the rook
+        int rookEndY = rookY - deltaY;
+        for (int col = Math.Min(start.Y, rookEndY) + 1; col < Math.Max(start.Y, rookEndY); col++)
+        {
+            if (board.GetPieceAt(new Coordinates(start.X, col)) != null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ErrorMessages.CastlingPacthError);
+                Console.ResetColor();
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+    private void HandleCastling(Move move)
+    {
+
+        Coordinates start = move.StartPosition;
+        Coordinates end = move.EndPosition;
+        Piece king = move.PiecePlayed;
+        int deltaY = Math.Sign(end.Y - start.Y);
+        int rookY = end.Y + (deltaY == 1 ? 1 : (deltaY == -1 ? -2 : 0));
+
+        Piece rook = board.GetPieceAt(new Coordinates(start.X, rookY));
+        int rookEndY = rookY - deltaY;
+
         // Move the rook
-        Coordinates rookStart = new Coordinates(startCoord.X, (endCoord.Y == 6) ? 7 : 0);
-        Coordinates rookEnd = new Coordinates(startCoord.X, rookEndY);
+        Coordinates rookStart = new Coordinates(start.X, (end.Y == 6) ? 7 : 0);
+        Coordinates rookEnd = new Coordinates(start.X, rookEndY);
         board.RemovePieceAt(rookStart);
         board.AddPiece(rook, rookEnd);
         rook.Coordinates = rookEnd;
         ((Rook)rook).IsMoved = true;
 
         // Move the king
-        board.RemovePieceAt(startCoord);
-        board.AddPiece(king, endCoord);
-        king.Coordinates = endCoord;
+        board.RemovePieceAt(start);
+        board.AddPiece(king, end);
+        king.Coordinates = end;
         ((King)king).IsMoved = true;
+
+        turnsHistory.Add(currentTurn);
     }
+
 
 
     private void ExecuteMove(Move move)
@@ -201,14 +230,12 @@ public class Game
         Coordinates start = move.StartPosition;
         Coordinates end = move.EndPosition;
         Piece pieceAtStart = move.PiecePlayed;
-
-        // Check if a piece is being captured
         Piece pieceAtEnd = board.GetPieceAt(end);
+
 
         if (pieceAtEnd != null && pieceAtEnd.Player != pieceAtStart.Player)
         {
             board.RemovePieceAt(end);
-            // Increment the capturing player's score
             currentTurn.Player.Score++;
         }
 
@@ -218,18 +245,28 @@ public class Game
             {
                 ((Pawn)pieceAtStart).IsMoved = true;
             }
-
+        }
+        if (pieceAtStart.Type == PieceType.King)
+        {
+            if (!((King)pieceAtStart).IsMoved)
+            {
+                ((King)pieceAtStart).IsMoved = true;
+            }
+        }
+        if (pieceAtStart.Type == PieceType.Rook)
+        {
+            if (!((Rook)pieceAtStart).IsMoved)
+            {
+                ((Rook)pieceAtStart).IsMoved = true;
+            }
         }
 
-        // Move the piece to the new position
         board.RemovePieceAt(start);
         board.AddPiece(pieceAtStart, end);
 
-        // Update the piece's coordinates
         pieceAtStart.Coordinates = end;
 
         turnsHistory.Add(currentTurn);
-        // Additional move-related logic can be added here
     }
 
 
@@ -252,7 +289,9 @@ public class Game
 
         if (piece == null || piece.Player != currentTurn.Player)
         {
-            Console.WriteLine($"Start position doesn't contain {currentTurn.Player.Color} piece.");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(ErrorMessages.EnemyPieceStartError(currentTurn.Player));
+            Console.ResetColor();
             return false;
         }
 
@@ -288,7 +327,6 @@ public class Game
 
         while (currentX != end.X || currentY != end.Y)
         {
-            // Check if the current position is occupied by a piece
             if (board.GetPieceAt(new Coordinates(currentX, currentY)) != null)
             {
                 return false; // Path is blocked by another piece
@@ -303,7 +341,6 @@ public class Game
 
     private bool IsGameOver()
     {
-        // Placeholder for game over condition
         return false;
     }
 
@@ -352,10 +389,30 @@ public class Game
         }
     }
 
+    private bool IsKingInCheck(Player player)
+    {
+        Piece king = board.GetPieceOfType(PieceType.King, player);
+        if (king == null)
+        {
+            throw new InvalidOperationException("King not found on the board.");
+        }
+
+        // Get all opponent pieces
+        List<Piece> opponentPieces = (player == player1) ? board.BlackPieces : board.WhitePieces;
+
+        foreach (Piece piece in opponentPieces)
+        {
+            if (piece.IsValidMove(piece.Coordinates, king.Coordinates, board))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private void PrintResult()
     {
-        // Placeholder for printing game result
         Console.WriteLine("Printing game result...");
     }
 

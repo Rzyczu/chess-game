@@ -66,6 +66,12 @@ namespace chess
             }
         }
 
+        public Piece GetPieceOfType(PieceType type, Player player)
+        {
+            List<Piece> pieces = (player.Color == ColorType.White) ? WhitePieces : BlackPieces;
+            return pieces.FirstOrDefault(piece => piece.Type == type);
+        }
+
         public bool IsWithinBounds(Coordinates position)
         {
             return position.X >= 0 && position.X < Width && position.Y >= 0 && position.Y < Height;

@@ -10,7 +10,7 @@ namespace chess.Enums
     {
         King,
         Queen,
-        Rock,
+        Rook,
         Bishop,
         Knight,
         Pawn

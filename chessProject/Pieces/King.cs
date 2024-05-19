@@ -20,7 +20,17 @@ namespace chess.Pieces
             int deltaY = Math.Abs(start.Y - end.Y);
 
             // King can move one square in any direction
-            return deltaX <= 1 && deltaY <= 1;
+            if (deltaX <= 1 && deltaY <= 1)
+            {
+                return true;
+            }
+            // King can castling
+            if (deltaY == 2)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
