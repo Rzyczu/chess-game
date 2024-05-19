@@ -13,56 +13,42 @@ public class Game
 
     public Game()
     {
-        // Initialize players
         player1 = new Player(ColorType.White);
         player2 = new Player(ColorType.Black);
-
-        // Initialize game board
         board = new GameBoard(8, 8);
-
-        // Set up initial pieces
         SetInitialPieces();
-
-        // Initialize turns history
         turnsHistory = new List<Turn>();
-
-        // Start the game with player 1 (white) making the first move
         currentTurn = new Turn(1, player1);
     }
 
     private void SetInitialPieces()
     {
-        // Set up white pieces
-        board.AddPiece(new Rook(new Coordinates(0, 0), player1), new Coordinates(0, 0));
-        //board.AddPiece(new Knight(new Coordinates(0, 1), player1), new Coordinates(0, 1));
-        //board.AddPiece(new Bishop(new Coordinates(0, 2), player1), new Coordinates(0, 2));
-        //board.AddPiece(new Queen(new Coordinates(0, 3), player1), new Coordinates(0, 3));
-        board.AddPiece(new King(new Coordinates(0, 4), player1), new Coordinates(0, 4));
-        //board.AddPiece(new Bishop(new Coordinates(0, 5), player1), new Coordinates(0, 5));
-        //board.AddPiece(new Knight(new Coordinates(0, 6), player1), new Coordinates(0, 6));
-        board.AddPiece(new Rook(new Coordinates(0, 7), player1), new Coordinates(0, 7));
+        PlacePiecesForPlayer(player1, 0);
+        PlacePiecesForPlayer(player2, 7);
 
-        for (int i = 0; i < 8; i++)
+        for (int col = 0; col < board.Width; col++)
         {
-            board.AddPiece(new Pawn(new Coordinates(1, i), player1), new Coordinates(1, i));
-        }
-
-        // Set up black pieces
-        board.AddPiece(new Rook(new Coordinates(7, 0), player2), new Coordinates(7, 0));
-        //board.AddPiece(new Knight(new Coordinates(7, 1), player2), new Coordinates(7, 1));
-        //board.AddPiece(new Bishop(new Coordinates(7, 2), player2), new Coordinates(7, 2));
-        //board.AddPiece(new Queen(new Coordinates(7, 3), player2), new Coordinates(7, 3));
-        board.AddPiece(new King(new Coordinates(7, 4), player2), new Coordinates(7, 4));
-        //board.AddPiece(new Bishop(new Coordinates(7, 5), player2), new Coordinates(7, 5));
-        //board.AddPiece(new Knight(new Coordinates(7, 6), player2), new Coordinates(7, 6));
-        board.AddPiece(new Rook(new Coordinates(7, 7), player2), new Coordinates(7, 7));
-
-        for (int i = 0; i < 8; i++)
-        {
-            board.AddPiece(new Pawn(new Coordinates(6, i), player2), new Coordinates(6, i));
+            board.AddPiece(new Pawn(new Coordinates(board.Height + 1, col), player1), new Coordinates(1, col));
+            board.AddPiece(new Pawn(new Coordinates(board.Height - 1, col), player2), new Coordinates(6, col));
         }
     }
 
+    private void PlacePiecesForPlayer(Player player, int row)
+    {
+        // Place Rooks
+        board.AddPiece(new Rook(new Coordinates(row, 0), player), new Coordinates(row, 0));
+        board.AddPiece(new Rook(new Coordinates(row, 7), player), new Coordinates(row, 7));
+        // Place Knights
+        board.AddPiece(new Knight(new Coordinates(row, 1), player), new Coordinates(row, 1));
+        board.AddPiece(new Knight(new Coordinates(row, 6), player), new Coordinates(row, 6));
+        // Place Bishops
+        board.AddPiece(new Bishop(new Coordinates(row, 2), player), new Coordinates(row, 2));
+        board.AddPiece(new Bishop(new Coordinates(row, 5), player), new Coordinates(row, 5));
+        // Place Queen
+        board.AddPiece(new Queen(new Coordinates(row, 3), player), new Coordinates(row, 3));
+        // Place King
+        board.AddPiece(new King(new Coordinates(row, 4), player), new Coordinates(row, 4));
+    }
 
     public void StartGame()
     {
@@ -91,7 +77,6 @@ public class Game
     private void ExecuteTurn()
     {
         Console.WriteLine($"\nPlayer {currentTurn.Player.Color}'s turn\n");
-
         MakeMove();
         UpdateTurn();
     }
@@ -102,17 +87,16 @@ public class Game
         string moveInput = Console.ReadLine();
         string[] moveParts = moveInput.Split(' ');
 
-        if (moveParts.Length != 2)
+        if (moveParts.Length != 2 || !IsValidInput(moveParts[0]) || !IsValidInput(moveParts[1]))
         {
             Console.WriteLine(ErrorMessages.MoveFormatInputError);
-            MakeMove(); // Retry move
+            MakeMove();
             return;
         }
 
         string startPosition = moveParts[0];
         string endPosition = moveParts[1];
 
-        // Convert algebraic notation to board coordinates (e.g., 'e2' -> (1, 4))
         Coordinates start = AlgebraicToCoordinates(startPosition);
         Coordinates end = AlgebraicToCoordinates(endPosition);
 
@@ -133,6 +117,7 @@ public class Game
         }
 
         Move move = new Move(start, end, pieceAtStart, null);
+
         if (!IsValidMove(move))
         {
             Console.WriteLine(ErrorMessages.InvalidMoveError);
@@ -155,8 +140,14 @@ public class Game
                 return;
             }
         }
-
         ExecuteMove(move);
+    }
+
+    private bool IsValidInput(string position)
+    {
+        return position.Length == 2 &&
+               position[0] >= 'a' && position[0] <= 'h' &&
+               position[1] >= '1' && position[1] <= '8';
     }
 
     private bool IsValidCastling(Move move)
