@@ -120,18 +120,24 @@ public class Game
         // Convert algebraic notation to board coordinates (e.g., 'e2' -> (1, 4))
         Coordinates startCoord = AlgebraicToCoordinates(startPosition);
         Coordinates endCoord = AlgebraicToCoordinates(endPosition);
-        Piece pieceAtStart = board.GetPieceAt(startCoord);
 
-        if (pieceAtStart == null)
+        if (!board.IsWithinBounds(startCoord) || !board.IsWithinBounds(endCoord))
         {
             Console.WriteLine("Position is out of bounds.");
             MakeMove(); // Retry move
             return;
         }
 
-        Move move = new Move(startCoord, endCoord, pieceAtStart, null); // PieceCaptured is null for now
+        Piece pieceAtStart = board.GetPieceAt(startCoord);
 
-        // Validate move
+        if (pieceAtStart == null)
+        {
+            Console.WriteLine("No piece at start position.");
+            MakeMove(); // Retry move
+            return;
+        }
+
+        Move move = new Move(startCoord, endCoord, pieceAtStart, null);
         if (!IsValidMove(move))
         {
             Console.WriteLine("Invalid move. Please try again.");
@@ -140,8 +146,6 @@ public class Game
         }
 
         currentTurn.Move = move;
-
-        // Execute the move
         ExecuteMove(move);
 
         // Check for castling
@@ -150,8 +154,6 @@ public class Game
             // Castling
             HandleCastling(startCoord, endCoord);
         }
-
-        // Placeholder for other move-related logic (e.g., check for checkmate)
     }
 
     private void HandleCastling(Coordinates startCoord, Coordinates endCoord)
@@ -244,48 +246,36 @@ public class Game
         currentTurn = new Turn(currentTurn.Number + 1, (currentTurn.Player == player1) ? player2 : player1);
     }
 
-    // Placeholder for move validation logic
     private bool IsValidMove(Move move)
     {
         Piece piece = move.PiecePlayed;
 
-        // Check if the start position contains a piece belonging to the current player
         if (piece == null || piece.Player != currentTurn.Player)
         {
             Console.WriteLine($"Start position doesn't contain {currentTurn.Player.Color} piece.");
-            return false; // Invalid move if the start position doesn't contain the player's piece
+            return false;
         }
 
         Coordinates start = move.StartPosition;
         Coordinates end = move.EndPosition;
 
-        // Check if the end position is empty or contains an opponent's piece (if capturing)
         Piece pieceAtEnd = board.GetPieceAt(end);
-        if (piece == null)
+        if (pieceAtEnd != null && pieceAtEnd.Player == currentTurn.Player)
         {
-            Console.WriteLine("Position is out of bounds.");
             return false;
         }
 
-        if (pieceAtEnd != null && pieceAtEnd.Player == currentTurn.Player)
-        {
-            return false; // Invalid move if the end position contains the player's own piece
-        }
-
-        // Check if the move follows the movement rules for the specific piece type
         if (!piece.IsValidMove(start, end, board))
         {
-            return false; // Invalid move if the piece doesn't move according to its rules
+            return false;
         }
 
-        // Check if the piece is not a knight and the path between start and end positions is clear of other pieces
         if (!(piece is Knight) && !IsPathClear(start, end, board))
         {
-            Console.WriteLine("Patch isn't clear.");
-            return false; // Invalid move if there are pieces blocking the path
+            return false;
         }
 
-        return true; // Move is valid if all conditions pass
+        return true;
     }
 
     private bool IsPathClear(Coordinates start, Coordinates end, GameBoard board)
@@ -319,61 +309,44 @@ public class Game
 
     private void PrintBoard()
     {
-        // Define colors for board squares and pieces
         ConsoleColor lightSquareColor = ConsoleColor.DarkGreen;
         ConsoleColor darkSquareColor = ConsoleColor.DarkGray;
         ConsoleColor whiteColor = ConsoleColor.White;
         ConsoleColor blackColor = ConsoleColor.Black;
 
-        // Label for column headers
-        Console.Write("   "); // Empty space for alignment
+        Console.Write("   ");
         for (int col = 0; col < board.Width; col++)
         {
-
             Console.ForegroundColor = darkSquareColor;
-            char columnLabel = (char)('A' + col); // Convert column index to letter (A, B, C, ...)
+            char columnLabel = (char)('A' + col);
             Console.Write(columnLabel.ToString().PadLeft(2).PadRight(3));
         }
-        Console.WriteLine(); // Move to the next line after printing column headers
+        Console.WriteLine();
 
-        // Iterate through each row of the board
         for (int row = 0; row < board.Height; row++)
         {
-            // Print row number
             Console.ForegroundColor = darkSquareColor;
-            Console.Write((row + 1).ToString().PadLeft(2) + " "); // Pad left to align with column labels
+            Console.Write((row + 1).ToString().PadLeft(2) + " ");
 
-            // Alternate between dark and light squares for each row
             ConsoleColor squareColor = (row % 2 == 0) ? darkSquareColor : lightSquareColor;
-            // Iterate through each column of the board
             for (int col = 0; col < board.Width; col++)
             {
-                // Set background color for the current square
                 Console.BackgroundColor = squareColor;
 
-                // Get the piece at the current position
                 Piece piece = board.GetPieceAt(new Coordinates(row, col));
-
-                // If there is a piece at the current position
                 if (piece != null)
                 {
-                    // Set piece color based on its player color
                     ConsoleColor pieceColor = (piece.Player.Color == ColorType.White) ? whiteColor : blackColor;
                     Console.ForegroundColor = pieceColor;
-
-                    // Print the first character of the piece type with appropriate padding
-                    Console.Write("\x1b[1m" + piece.Type.ToString().Substring(0, 1).PadLeft(2).PadRight(3) + "\x1b[0m");
+                    Console.Write(piece.Type.ToString().Substring(0, 1).PadLeft(2).PadRight(3));
                 }
                 else
                 {
-                    // If there is no piece at the current position, print an empty space with appropriate padding
                     Console.Write(" ".PadRight(3));
                 }
-                // Toggle square color for the next square
+
                 squareColor = (squareColor == darkSquareColor) ? lightSquareColor : darkSquareColor;
             }
-
-            // Reset console colors and move to the next line for the next row
             Console.ResetColor();
             Console.WriteLine();
         }
