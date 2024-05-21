@@ -15,7 +15,9 @@ namespace chess
         public static readonly string InvalidMoveError = "\x1b[31mInvalid move. Please try again. \x1b[0m";
         public static readonly string CatlingPieceMovedError = "\x1b[31mInvalid castling. King or rook has already moved. \x1b[0m";
         public static readonly string CastlingPacthError = "\x1b[31mInvalid castling. Pieces obstruct the path. \x1b[0m";
-        
+        public static readonly string InvalidPacthError = "\x1b[31mPieces obstruct the path. \x1b[0m";
+        public static readonly string NoKingInCheckMoveError = "\x1b[31mKing is in check. \x1b[0m";
+
         public static string EnemyPieceStartError(Player player) => $"\x1b[31mStart position doesn't contain {player.Color} piece. \x1b[0m";
 
     }

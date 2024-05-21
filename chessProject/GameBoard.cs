@@ -50,7 +50,7 @@ namespace chess
         {
             if (IsWithinBounds(position))
             {
-                Piece pieceToRemove = BoardArray[position.Y, position.X]; // Updated indexing
+                Piece pieceToRemove = BoardArray[position.X, position.Y]; // Updated indexing
                 if (pieceToRemove != null)
                 {
                     if (pieceToRemove.Player.Color == ColorType.White)

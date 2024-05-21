@@ -2,6 +2,8 @@
 using chess;
 using chess.Enums;
 using System.Runtime.CompilerServices;
+using System.Numerics;
+using System.Net.NetworkInformation;
 
 public class Game
 {
@@ -52,9 +54,7 @@ public class Game
 
     public void StartGame()
     {
-        Console.WriteLine("Welcome! Starting new game of chess...\n\n\n");
-        Console.WriteLine($"Turn: {currentTurn.Number}\n");
-        PrintBoard();
+        Console.WriteLine("Welcome! Starting new game of chess...\n\n");
         PlayGame();
     }
 
@@ -62,10 +62,17 @@ public class Game
     {
         while (!IsGameOver())
         {
-            ExecuteTurn();
             Console.WriteLine($"\n------------------------------------------\n");
-            Console.WriteLine($"Turn: {currentTurn.Number}\n");
+            Console.WriteLine($"Turn: {currentTurn.Number} \n");
+
             PrintBoard();
+            Console.WriteLine($"Player {currentTurn.Player.Color} move \n");
+
+            CheckKingInCheck(player1);
+            CheckKingInCheck(player2);
+
+            ExecuteTurn();
+
             if (IsGameOver())
             {
                 Console.WriteLine("Game over!");
@@ -74,9 +81,32 @@ public class Game
         }
     }
 
+    private void CheckKingInCheck(Player player)
+    {
+        King king = ((King)board.GetPieceOfType(PieceType.King, player));
+        if (IsKingInCheck(player))
+        {
+            king.IsInCheck = true;
+            Console.WriteLine($"{player.Color} King is in check\n");
+        }
+        else
+        {
+            king.IsInCheck = false;
+        }
+    }
+
+    private bool IsInCheck()
+    {
+        if (IsKingInCheck(player1))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     private void ExecuteTurn()
     {
-        Console.WriteLine($"\nPlayer {currentTurn.Player.Color}'s turn\n");
         MakeMove();
         UpdateTurn();
     }
@@ -273,6 +303,7 @@ public class Game
     {
         Piece piece = move.PiecePlayed;
 
+        //Enemy piece is on start position
         if (piece == null || piece.Player != currentTurn.Player)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -284,21 +315,58 @@ public class Game
         Coordinates start = move.StartPosition;
         Coordinates end = move.EndPosition;
 
+        //Ally piece is on end position
         Piece pieceAtEnd = board.GetPieceAt(end);
         if (pieceAtEnd != null && pieceAtEnd.Player == currentTurn.Player)
         {
             return false;
         }
 
+        //Valid move
         if (!piece.IsValidMove(start, end, board))
         {
             return false;
         }
 
+        //Patch is obstruck
         if (!(piece is Knight) && !IsPathClear(start, end, board))
         {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(ErrorMessages.InvalidPacthError);
+            Console.ResetColor();
             return false;
         }
+
+        //King in check ins't piece moved
+        Piece currentPlayerKing = board.GetPieceOfType(PieceType.King, currentTurn.Player);
+        if (((King)currentPlayerKing).IsInCheck && piece != currentPlayerKing)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(ErrorMessages.NoKingInCheckMoveError);
+            Console.ResetColor();
+            return false;
+        }
+
+        //King is move on in check position
+        if (piece == currentPlayerKing)
+        {
+            bool prevKingState = ((King)currentPlayerKing).IsInCheck;
+            board.RemovePieceAt(start);
+            board.RemovePieceAt(end);
+            board.AddPiece(currentPlayerKing, end);
+            if (IsKingInCheck(currentTurn.Player) && currentTurn.Player != null)
+            {
+                board.RemovePieceAt(end);
+                if (pieceAtEnd != null)
+                {
+                    board.AddPiece(pieceAtEnd, end);
+                }
+                board.AddPiece(currentPlayerKing, start);
+                ((King)currentPlayerKing).IsInCheck = prevKingState;
+                return false;
+            }
+        }
+
 
         return true;
     }
@@ -373,15 +441,20 @@ public class Game
             Console.ResetColor();
             Console.WriteLine();
         }
+        Console.WriteLine();
+
     }
 
     private bool IsKingInCheck(Player player)
     {
-        Piece king = board.GetPieceOfType(PieceType.King, player);
+        Piece kingPiece = board.GetPieceOfType(PieceType.King, player);
+        King? king = kingPiece as King;
+
         if (king == null)
         {
             throw new InvalidOperationException("King not found on the board.");
         }
+
 
         // Get all opponent pieces
         List<Piece> opponentPieces = (player == player1) ? board.BlackPieces : board.WhitePieces;

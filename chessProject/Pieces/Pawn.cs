@@ -19,8 +19,8 @@ namespace chess.Pieces
                 return false;
             }
 
-            int deltaX = end.X - start.X;
-            int deltaY = Math.Abs(end.Y - start.Y);
+            int deltaX = Math.Abs(end.X - start.X);
+            int deltaY = end.Y - start.Y;
 
             if (Player.Color == ColorType.White)
             {
