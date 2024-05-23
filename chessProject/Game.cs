@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Numerics;
 using System.Net.NetworkInformation;
 using System.Text;
+using chess.Helpers;
 
 public class Game
 {
@@ -64,10 +65,13 @@ public class Game
         while (!IsGameOver())
         {
             Console.WriteLine($"\n------------------------------------------\n");
-            Console.WriteLine($"Turn: {currentTurn.Number} \n");
+            ConsoleHelper.WriteInfo(InfoMessages.CurrentTurnInfo(currentTurn));
+            Console.WriteLine();
 
             PrintBoard();
-            Console.WriteLine($"Player {currentTurn.Player.Color} move \n");
+
+            ConsoleHelper.WriteInfo(InfoMessages.CurrentTurnInfo(currentTurn));
+            Console.WriteLine();
 
             CheckKingInCheck(player1);
             CheckKingInCheck(player2);
@@ -76,7 +80,7 @@ public class Game
 
             if (IsGameOver())
             {
-                Console.WriteLine("Game over!");
+                ConsoleHelper.WriteInfo(InfoMessages.GameOverInfo);
                 PrintResult();
             }
         }
@@ -88,22 +92,14 @@ public class Game
         if (IsKingInCheck(player))
         {
             king.IsInCheck = true;
-            Console.WriteLine($"{player.Color} King is in check\n");
+
+            ConsoleHelper.WriteWarning(WarningMessages.KingInCheckWarning(currentTurn));
+            Console.WriteLine();
         }
         else
         {
             king.IsInCheck = false;
         }
-    }
-
-    private bool IsInCheck()
-    {
-        if (IsKingInCheck(player1))
-        {
-            return true;
-        }
-
-        return false;
     }
 
     private void ExecuteTurn()
@@ -114,13 +110,13 @@ public class Game
 
     private void MakeMove()
     {
-        Console.WriteLine("Enter your move (e.g., 'e2 e4'):");
+        ConsoleHelper.WriteInfo(InfoMessages.EnterMoveInfo);
         string moveInput = Console.ReadLine();
         string[] moveParts = moveInput.Split(' ');
 
         if (moveParts.Length != 2 || !IsValidInput(moveParts[0]) || !IsValidInput(moveParts[1]))
         {
-            Console.WriteLine(ErrorMessages.MoveFormatInputError);
+            ConsoleHelper.WriteError(ErrorMessages.MoveFormatInputError);
             MakeMove();
             return;
         }
@@ -133,7 +129,7 @@ public class Game
 
         if (!board.IsWithinBounds(start) || !board.IsWithinBounds(end))
         {
-            Console.WriteLine(ErrorMessages.WithinBoundError);
+            ConsoleHelper.WriteError(ErrorMessages.WithinBoundError);
             MakeMove(); // Retry move
             return;
         }
@@ -142,7 +138,7 @@ public class Game
 
         if (pieceAtStart == null)
         {
-            Console.WriteLine(ErrorMessages.PieceStartError);
+            ConsoleHelper.WriteError(ErrorMessages.PieceStartError);
             MakeMove(); // Retry move
             return;
         }
@@ -151,7 +147,7 @@ public class Game
 
         if (!IsValidMove(move))
         {
-            Console.WriteLine(ErrorMessages.InvalidMoveError);
+            ConsoleHelper.WriteError(ErrorMessages.InvalidMoveError);
             MakeMove(); // Retry move
             return;
         }
@@ -196,7 +192,7 @@ public class Game
         // Check if both the king and the rook haven't moved
         if (!(king is King kingPiece && !kingPiece.IsMoved) || !(rook is Rook rookPiece && !rookPiece.IsMoved))
         {
-            Console.WriteLine(ErrorMessages.CatlingPieceMovedError);
+            ConsoleHelper.WriteError(ErrorMessages.CatlingPieceMovedError);
             return false;
         }
 
@@ -206,9 +202,7 @@ public class Game
         {
             if (board.GetPieceAt(new Coordinates(row, start.Y)) != null)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(ErrorMessages.CastlingPacthError);
-                Console.ResetColor();
+                ConsoleHelper.WriteError(ErrorMessages.CastlingPacthError);
                 return false;
             }
         }
@@ -307,9 +301,7 @@ public class Game
         //Enemy piece is on start position
         if (piece == null || piece.Player != currentTurn.Player)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(ErrorMessages.EnemyPieceStartError(currentTurn.Player));
-            Console.ResetColor();
+            ConsoleHelper.WriteError(ErrorMessages.EnemyPieceStartError(currentTurn));
             return false;
         }
 
@@ -332,9 +324,7 @@ public class Game
         //Patch is obstruck
         if (!(piece is Knight) && !IsPathClear(start, end, board))
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(ErrorMessages.InvalidPacthError);
-            Console.ResetColor();
+            ConsoleHelper.WriteError(ErrorMessages.InvalidPacthError);
             return false;
         }
 
@@ -342,9 +332,7 @@ public class Game
         Piece currentPlayerKing = board.GetPieceOfType(PieceType.King, currentTurn.Player);
         if (((King)currentPlayerKing).IsInCheck && piece != currentPlayerKing)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(ErrorMessages.NoKingInCheckMoveError);
-            Console.ResetColor();
+            ConsoleHelper.WriteError(ErrorMessages.NoKingInCheckMoveError);
             return false;
         }
 
@@ -477,7 +465,7 @@ public class Game
 
     private void PrintResult()
     {
-        Console.WriteLine("Printing game result...");
+        Console.WriteLine("Game results");
     }
 
 

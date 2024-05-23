@@ -1,6 +1,6 @@
 ﻿namespace chess
 {
-    internal class Turn
+    public class Turn
     {
         public  int Number { get; set; }
         public Player Player { get; set; }
