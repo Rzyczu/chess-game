@@ -337,7 +337,7 @@ public class Game
             return false;
         }
 
-        //King in check ins't piece moved
+        //Other piece moved when king is in check
         Piece currentPlayerKing = board.GetPieceOfType(PieceType.King, currentTurn.Player);
         if (((King)currentPlayerKing).IsInCheck && piece != currentPlayerKing)
         {
@@ -347,24 +347,26 @@ public class Game
             return false;
         }
 
-        //King is move on in check position
-        if (piece == currentPlayerKing)
+        //Piece is move on king in check position
+        bool prevKingState = ((King)currentPlayerKing).IsInCheck;
+        board.RemovePieceAt(start);
+        board.RemovePieceAt(end);
+        board.AddPiece(piece, end);
+
+        bool isInCheck = IsKingInCheck(currentTurn.Player);
+
+        ((King)currentPlayerKing).IsInCheck = prevKingState;
+        board.AddPiece(piece, start);
+        board.RemovePieceAt(end);
+
+        if (pieceAtEnd != null)
         {
-            bool prevKingState = ((King)currentPlayerKing).IsInCheck;
-            board.RemovePieceAt(start);
-            board.RemovePieceAt(end);
-            board.AddPiece(currentPlayerKing, end);
-            if (IsKingInCheck(currentTurn.Player) && currentTurn.Player != null)
-            {
-                board.RemovePieceAt(end);
-                if (pieceAtEnd != null)
-                {
-                    board.AddPiece(pieceAtEnd, end);
-                }
-                board.AddPiece(currentPlayerKing, start);
-                ((King)currentPlayerKing).IsInCheck = prevKingState;
-                return false;
-            }
+            board.AddPiece(pieceAtEnd, end);
+        }
+
+        if (isInCheck)
+        {
+            return false;
         }
 
 
@@ -461,7 +463,7 @@ public class Game
 
         foreach (Piece piece in opponentPieces)
         {
-            if (piece.IsValidMove(piece.Coordinates, king.Coordinates, board))
+            if (piece.IsValidMove(piece.Coordinates, king.Coordinates, board) && IsPathClear(piece.Coordinates, king.Coordinates, board))
             {
                 return true;
             }
