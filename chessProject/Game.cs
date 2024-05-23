@@ -4,6 +4,7 @@ using chess.Enums;
 using System.Runtime.CompilerServices;
 using System.Numerics;
 using System.Net.NetworkInformation;
+using System.Text;
 
 public class Game
 {
@@ -412,14 +413,14 @@ public class Game
         {
             Console.ForegroundColor = darkSquareColor;
             char columnLabel = (char)('A' + col);
-            Console.Write(columnLabel.ToString().PadLeft(2).PadRight(3));
+            Console.Write(columnLabel.ToString().PadRight(2));
         }
         Console.WriteLine();
 
         for (int row = 0; row < board.Height; row++)
         {
             Console.ForegroundColor = darkSquareColor;
-            Console.Write((row + 1).ToString().PadLeft(2) + " ");
+            Console.Write((row + 1).ToString().PadRight(1) + " ");
 
             ConsoleColor squareColor = (row % 2 == 0) ? darkSquareColor : lightSquareColor;
             for (int col = 0; col < board.Width; col++)
@@ -429,13 +430,15 @@ public class Game
                 Piece piece = board.GetPieceAt(new Coordinates(col, row));
                 if (piece != null)
                 {
+                    Console.OutputEncoding = Encoding.UTF8;
                     ConsoleColor pieceColor = (piece.Player.Color == ColorType.White) ? whiteColor : blackColor;
                     Console.ForegroundColor = pieceColor;
-                    Console.Write(piece.Type.ToString().Substring(0, 1).PadLeft(2).PadRight(3));
+                    char symbol = PieceSymbols.Symbols[piece.Type];
+                    Console.Write(symbol.ToString().PadRight(2));
                 }
                 else
                 {
-                    Console.Write(" ".PadRight(3));
+                    Console.Write(" ".PadRight(2));
                 }
 
                 squareColor = (squareColor == darkSquareColor) ? lightSquareColor : darkSquareColor;
