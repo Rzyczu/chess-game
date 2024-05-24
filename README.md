@@ -41,10 +41,11 @@ The project follows a typical C# class library structure, organized into namespa
 
 - **Game**: Represents the main game logic, including initialization, game flow, and move execution.
 - **Coordinates**: Represents the coordinates on the game board.
-- **GameBoard**: Represents the game board and provides methods for managing pieces and checking board boundaries.
-- **Move**: Represents a move made by a player.
-- **Player**: Represents a player in the game.
-- **Turn**: Represents a turn taken by a player.
+- **GameBoard**: Represents the game board and provides methods to add, remove, and access pieces on the board.
+- **Move**: Represents a move made by a player, including the start and end positions, the piece played, any captured piece, and any promotion.
+- **Player**: Represents a player in the game, including their color and score.
+- **Turn**: Represents a single turn in the game, including the player making the move and the move itself.
+- **Piece**: Represents a chess piece. It's an abstract class with subclasses for each type of piece (King, Queen, Rook, Bishop, Knight, Pawn).
 - **ColorType**: Enum representing the color of pieces (Black or White).
 - **PieceType**: Enum representing the type of chess pieces (King, Queen, Rook, Bishop, Knight, Pawn).
 - **ConsoleHelper**: Provides helper methods for writing messages to the console with different colors.
