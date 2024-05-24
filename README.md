@@ -41,7 +41,3 @@ ChessProject/bin/Debug/net7.0/chess.exe
 ## Dependencies
 
 - This project does not have any external dependencies and can be run on any system with a C# compiler.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
