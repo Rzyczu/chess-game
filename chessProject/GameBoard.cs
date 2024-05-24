@@ -2,6 +2,7 @@
 using chess.Pieces;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace chess
 {
@@ -75,6 +76,54 @@ namespace chess
         public bool IsWithinBounds(Coordinates position)
         {
             return position.X >= 0 && position.X < Width && position.Y >= 0 && position.Y < Height; // Updated conditions
+        }
+
+        public void PrintBoard()
+        {
+            ConsoleColor lightSquareColor = ConsoleColor.DarkGreen;
+            ConsoleColor darkSquareColor = ConsoleColor.DarkGray;
+            ConsoleColor whiteColor = ConsoleColor.White;
+            ConsoleColor blackColor = ConsoleColor.Black;
+
+            Console.Write("  ");
+            for (int col = 0; col < Width; col++)
+            {
+                Console.ForegroundColor = darkSquareColor;
+                char columnLabel = (char)('A' + col);
+                Console.Write(columnLabel.ToString().PadRight(2));
+            }
+            Console.WriteLine();
+
+            for (int row = 0; row < Height; row++)
+            {
+                Console.ForegroundColor = darkSquareColor;
+                Console.Write((row + 1).ToString().PadRight(1) + " ");
+
+                ConsoleColor squareColor = (row % 2 == 0) ? darkSquareColor : lightSquareColor;
+                for (int col = 0; col < Width; col++)
+                {
+                    Console.BackgroundColor = squareColor;
+
+                    Piece piece = GetPieceAt(new Coordinates(col, row));
+                    if (piece != null)
+                    {
+                        Console.OutputEncoding = Encoding.UTF8;
+                        ConsoleColor pieceColor = (piece.Player.Color == ColorType.White) ? whiteColor : blackColor;
+                        Console.ForegroundColor = pieceColor;
+                        char symbol = PieceSymbols.Symbols[piece.Type];
+                        Console.Write(symbol.ToString().PadRight(2));
+                    }
+                    else
+                    {
+                        Console.Write(" ".PadRight(2));
+                    }
+
+                    squareColor = (squareColor == darkSquareColor) ? lightSquareColor : darkSquareColor;
+                }
+                Console.ResetColor();
+                Console.WriteLine();
+            }
+            Console.WriteLine();
         }
     }
 }

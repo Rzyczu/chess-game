@@ -10,7 +10,6 @@
         public static readonly string NoKingInCheckMoveError = "King is in check.";
         public static readonly string CatlingPieceMovedError = "Invalid castling. King or rook has already moved.";
         public static readonly string CastlingPacthError = "Invalid castling. Pieces obstruct the path.";
-
         public static string EnemyPieceStartError(Turn currentTurn) => $"Start position doesn't contain {currentTurn.Player.Color} piece.";
     }
 
@@ -18,7 +17,8 @@
     {
         public static readonly string GameOverInfo = "Game over!";
         public static readonly string EnterMoveInfo = "Enter your move (e.g., 'e2 e4'): ";
-
+        public static readonly string PromotePawnInfo = "Promote pawn. Select new piece (e.g., '1'): ";
+        public static readonly string PromotePawnOptions = "1. Queen\n2. Rook\n3. Bishop\n4. Knight";
         public static string CurrentTurnInfo(Turn currentTurn) => $"Turn: {currentTurn.Number}.";
         public static string CurrentPlayerInfo(Turn currentTurn) => $"Player {currentTurn.Player.Color} move.";
 
@@ -27,7 +27,6 @@
     public static class WarningMessages
     {
         public static string KingInCheckWarning(Turn currentTurn) => $"{currentTurn.Player.Color} King is in check.";
-
     }
 
 }
