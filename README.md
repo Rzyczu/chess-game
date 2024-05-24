@@ -25,7 +25,7 @@ This is a simple implementation of a chess game in C#. It provides a basic frame
 
 1. Clone the repository to your local machine using Git:
 
-```bash git clone https://github.com/rzyczu/chess-game.git`
+``bash git clone https://github.com/rzyczu/chess-game.git
 
 ## How to Play
 
