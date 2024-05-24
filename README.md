@@ -19,7 +19,7 @@
 
 ## Downloading the Project
 To download the University Management System project to your local machine, follow these steps:
-1. Navigate to the GitHub repository: [University Management System](https://github.com/rzyczu/university-management-system).
+1. Navigate to the GitHub repository: [Chess Game](https://github.com/rzyczu/chess-game).
 2. Click on the green "Code" button and copy the repository URL.
 3. Open Git Bash or Terminal on your computer.
 4. Navigate to the directory where you want to download the project.
