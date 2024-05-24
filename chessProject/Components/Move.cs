@@ -1,6 +1,6 @@
-﻿using chess.Pieces;
+﻿using chess.Components.Pieces;
 
-namespace chess
+namespace chess.Components
 {
     public class Move
     {

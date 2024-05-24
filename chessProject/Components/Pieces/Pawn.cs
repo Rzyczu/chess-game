@@ -1,6 +1,7 @@
-﻿using chess.Enums;
+﻿using chess.Components;
+using chess.Helpers.Enums;
 
-namespace chess.Pieces
+namespace chess.Components.Pieces
 {
     public class Pawn : Piece
     {
@@ -40,7 +41,7 @@ namespace chess.Pieces
             {
                 return true; // Move one square forward
             }
-            if (deltaY == 2 && deltaX == 0  && board.GetPieceAt(end) == null && !IsMoved)
+            if (deltaY == 2 && deltaX == 0 && board.GetPieceAt(end) == null && !IsMoved)
             {
                 return true; // Move two squares forward from the initial position
             }

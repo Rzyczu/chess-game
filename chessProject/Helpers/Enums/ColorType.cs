@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace chess.Enums
+namespace chess.Helpers.Enums
 {
     public enum ColorType
     {

@@ -1,10 +1,11 @@
-﻿using chess.Pieces;
-using chess.Enums;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Numerics;
 using System.Net.NetworkInformation;
 using System.Text;
 using chess.Helpers;
+using chess.Helpers.Enums;
+using chess.Components;
+using chess.Components.Pieces;
 
 namespace chess
 {
@@ -21,38 +22,31 @@ namespace chess
             player1 = new Player(ColorType.White);
             player2 = new Player(ColorType.Black);
             board = new GameBoard(8, 8);
-            SetInitialPieces();
+            SetInitialPieces(player1, 0);
+            SetInitialPieces(player2, 7);
             turnsHistory = new List<Turn>();
             currentTurn = new Turn(1, player1);
         }
 
-        private void SetInitialPieces()
+        private void SetInitialPieces(Player player, int col)
         {
-            PlacePiecesForPlayer(player1, 0);
-            PlacePiecesForPlayer(player2, 7);
+            board.AddPiece(new Rook(new Coordinates(0, col), player), new Coordinates(0, col));
+            board.AddPiece(new Rook(new Coordinates(7, col), player), new Coordinates(7, col));
+
+            board.AddPiece(new Knight(new Coordinates(1, col), player), new Coordinates(1, col));
+            board.AddPiece(new Knight(new Coordinates(6, col), player), new Coordinates(6, col));
+
+            board.AddPiece(new Bishop(new Coordinates(2, col), player), new Coordinates(2, col));
+            board.AddPiece(new Bishop(new Coordinates(5, col), player), new Coordinates(5, col));
+
+            board.AddPiece(new Queen(new Coordinates(3, col), player), new Coordinates(3, col));
+
+            board.AddPiece(new King(new Coordinates(4, col), player), new Coordinates(4, col));
 
             for (int row = 0; row < board.Width; row++)
             {
-                board.AddPiece(new Pawn(new Coordinates(row, 1), player1), new Coordinates(row, 1));
-                board.AddPiece(new Pawn(new Coordinates(row, board.Height - 2), player2), new Coordinates(row, 6));
+                board.AddPiece(new Pawn(new Coordinates(row, col == 0 ? 1 : 6), player), new Coordinates(row, col == 0 ? 1 : 6));
             }
-        }
-
-        private void PlacePiecesForPlayer(Player player, int col)
-        {
-            // Place Rooks
-            board.AddPiece(new Rook(new Coordinates(0, col), player), new Coordinates(0, col));
-            board.AddPiece(new Rook(new Coordinates(7, col), player), new Coordinates(7, col));
-            // Place Knights
-            board.AddPiece(new Knight(new Coordinates(1, col), player), new Coordinates(1, col));
-            board.AddPiece(new Knight(new Coordinates(6, col), player), new Coordinates(6, col));
-            // Place Bishops
-            board.AddPiece(new Bishop(new Coordinates(2, col), player), new Coordinates(2, col));
-            board.AddPiece(new Bishop(new Coordinates(5, col), player), new Coordinates(5, col));
-            // Place Queen
-            board.AddPiece(new Queen(new Coordinates(3, col), player), new Coordinates(3, col));
-            // Place King
-            board.AddPiece(new King(new Coordinates(4, col), player), new Coordinates(4, col));
         }
 
         public void StartGame()
@@ -61,14 +55,16 @@ namespace chess
             PlayGame();
         }
 
-       private void PlayGame()
+        private void PlayGame()
         {
             while (!IsGameOver())
             {
                 Console.WriteLine($"\n------------------------------------------\n");
                 ConsoleHelper.WriteInfo(InfoMessages.CurrentTurnInfo(currentTurn));
+                Console.WriteLine();
                 board.PrintBoard();
                 ConsoleHelper.WriteInfo(InfoMessages.CurrentPlayerInfo(currentTurn));
+                Console.WriteLine();
                 CheckKingInCheck(player1);
                 CheckKingInCheck(player2);
                 ExecuteTurn();
@@ -84,31 +80,26 @@ namespace chess
         private void CheckKingInCheck(Player player)
         {
             King king = (King)board.GetPieceOfType(PieceType.King, player);
-            if (IsKingInCheck(player))
-            {
-                king.IsInCheck = true;
+            king.IsInCheck = IsKingInCheck(player);
 
-                ConsoleHelper.WriteWarning(WarningMessages.KingInCheckWarning(currentTurn));
-                Console.WriteLine();
-            }
-            else
+            if (king.IsInCheck)
             {
-                king.IsInCheck = false;
+                ConsoleHelper.WriteWarning(WarningMessages.KingInCheckWarning(currentTurn));
             }
         }
 
         private void ExecuteTurn()
         {
             MakeMove();
+            turnsHistory.Add(currentTurn);
             UpdateTurn();
         }
 
         private void MakeMove()
         {
             ConsoleHelper.WriteInfo(InfoMessages.EnterMoveInfo);
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            string ?moveInput = Console.ReadLine();
-            Console.ResetColor();
+            string? moveInput = ReadMoveInput();
+
             string[] moveParts = moveInput.Split(' ');
 
             if (moveParts.Length != 2 || !IsValidInput(moveParts[0]) || !IsValidInput(moveParts[1]))
@@ -165,6 +156,14 @@ namespace chess
                 }
             }
             ExecuteMove(move);
+        }
+
+        private string ReadMoveInput()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            string? moveInput = Console.ReadLine();
+            Console.ResetColor();
+            return moveInput;
         }
 
         private bool IsValidInput(string position)
@@ -229,7 +228,6 @@ namespace chess
             king.Coordinates = end;
             ((King)king).IsMoved = true;
 
-            turnsHistory.Add(currentTurn);
         }
 
         private void ExecuteMove(Move move)
@@ -276,7 +274,6 @@ namespace chess
             {
                 PromotePawn(pieceAtStart);
             }
-                turnsHistory.Add(currentTurn);
         }
 
         private void PromotePawn(Piece pieceBeforePromotion)
@@ -508,7 +505,7 @@ namespace chess
         private void PrintResult()
         {
             Console.WriteLine("Game results");
-            Console.WriteLine("Game results");
+            Console.WriteLine();
             Player winner = IsKingInCheck(player1) ? player2 : player1;
             Console.WriteLine($"Winner: {winner.Color}");
             Console.WriteLine("\nMoves History:");

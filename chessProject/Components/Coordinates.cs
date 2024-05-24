@@ -1,4 +1,4 @@
-﻿namespace chess
+﻿namespace chess.Components
 {
     public class Coordinates
     {

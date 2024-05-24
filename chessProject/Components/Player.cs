@@ -1,6 +1,6 @@
-﻿using chess.Enums;
+﻿using chess.Helpers.Enums;
 
-namespace chess
+namespace chess.Components
 {
     public class Player
     {

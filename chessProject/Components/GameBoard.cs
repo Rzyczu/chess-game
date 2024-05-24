@@ -1,10 +1,10 @@
-﻿using chess.Enums;
-using chess.Pieces;
+﻿using chess.Components.Pieces;
+using chess.Helpers.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace chess
+namespace chess.Components
 {
     public class GameBoard
     {
@@ -69,7 +69,7 @@ namespace chess
 
         public Piece GetPieceOfType(PieceType type, Player player)
         {
-            List<Piece> pieces = (player.Color == ColorType.White) ? WhitePieces : BlackPieces;
+            List<Piece> pieces = player.Color == ColorType.White ? WhitePieces : BlackPieces;
             return pieces.FirstOrDefault(piece => piece.Type == type);
         }
 
@@ -99,7 +99,7 @@ namespace chess
                 Console.ForegroundColor = darkSquareColor;
                 Console.Write((row + 1).ToString().PadRight(1) + " ");
 
-                ConsoleColor squareColor = (row % 2 == 0) ? darkSquareColor : lightSquareColor;
+                ConsoleColor squareColor = row % 2 == 0 ? darkSquareColor : lightSquareColor;
                 for (int col = 0; col < Width; col++)
                 {
                     Console.BackgroundColor = squareColor;
@@ -108,7 +108,7 @@ namespace chess
                     if (piece != null)
                     {
                         Console.OutputEncoding = Encoding.UTF8;
-                        ConsoleColor pieceColor = (piece.Player.Color == ColorType.White) ? whiteColor : blackColor;
+                        ConsoleColor pieceColor = piece.Player.Color == ColorType.White ? whiteColor : blackColor;
                         Console.ForegroundColor = pieceColor;
                         char symbol = PieceSymbols.Symbols[piece.Type];
                         Console.Write(symbol.ToString().PadRight(2));
@@ -118,7 +118,7 @@ namespace chess
                         Console.Write(" ".PadRight(2));
                     }
 
-                    squareColor = (squareColor == darkSquareColor) ? lightSquareColor : darkSquareColor;
+                    squareColor = squareColor == darkSquareColor ? lightSquareColor : darkSquareColor;
                 }
                 Console.ResetColor();
                 Console.WriteLine();

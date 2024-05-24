@@ -1,4 +1,4 @@
-﻿using chess.Enums;
+﻿using chess.Helpers.Enums;
 
 public static class PieceSymbols
 {

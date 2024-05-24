@@ -1,12 +1,15 @@
-﻿namespace chess.Pieces
+﻿using chess.Components;
+using chess.Helpers.Enums;
+
+namespace chess.Components.Pieces
 {
     public abstract class Piece
     {
         public Coordinates Coordinates { get; set; }
         public Player Player { get; set; }
-        public Enums.PieceType Type { get; set; }
+        public PieceType Type { get; set; }
 
-        public Piece(Coordinates coordinates, Player player, Enums.PieceType type)
+        public Piece(Coordinates coordinates, Player player, PieceType type)
         {
             Coordinates = coordinates;
             Player = player;

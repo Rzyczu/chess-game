@@ -1,6 +1,7 @@
-﻿using chess.Enums;
+﻿using chess.Components;
+using chess.Helpers.Enums;
 
-namespace chess.Pieces
+namespace chess.Components.Pieces
 {
     public class Queen : Piece
     {

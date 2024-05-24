@@ -1,4 +1,6 @@
-﻿namespace chess
+﻿using chess.Components;
+
+namespace chess
 {
     public static class ErrorMessages
     {
