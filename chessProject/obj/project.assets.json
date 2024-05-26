@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\repos\\chess\\chessProject\\chess.csproj",
+      "projectUniqueName": "C:\\repos\\chess-game\\chessProject\\chess.csproj",
       "projectName": "chess",
-      "projectPath": "C:\\repos\\chess\\chessProject\\chess.csproj",
+      "projectPath": "C:\\repos\\chess-game\\chessProject\\chess.csproj",
       "packagesPath": "C:\\Users\\milos\\.nuget\\packages\\",
-      "outputPath": "C:\\repos\\chess\\chessProject\\obj\\",
+      "outputPath": "C:\\repos\\chess-game\\chessProject\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

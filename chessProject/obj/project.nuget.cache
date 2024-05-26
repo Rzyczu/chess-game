@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "x5ugqqfv7hsVRQb3u1NcIu7NqSDHeGEQD5/TWuh376Ny+PtSYP0JnKkWraID411tfaYrg/8afyLd0DM2ySA8zw==",
+  "dgSpecHash": "kWUALiSaNuWDiSFWy8OFUj9p0yz5TBTnZ9PuZnBUhulMf+hQschYKy9SntRgsG1u7GxGudMMTBo4Zik+QKh8Sw==",
   "success": true,
-  "projectFilePath": "C:\\repos\\chess\\chessProject\\chess.csproj",
+  "projectFilePath": "C:\\repos\\chess-game\\chessProject\\chess.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
