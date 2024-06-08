@@ -2,7 +2,7 @@
 
 ## About
 
-This is a simple implementation of a chess game in C#. It provides a basic framework for playing chess with two players.
+This is a simple implementation of a console chess game in C#. It provides a basic framework for playing chess with two players.
 
 ## Technologies Used
 
