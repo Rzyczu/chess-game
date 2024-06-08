@@ -2,12 +2,12 @@
 
 ## About
 
-This is a simple implementation of a chess game in C#. It provides a basic framework for playing chess with two players.
+This is a simple implementation of a console chess game in C#. It provides a basic framework for playing chess with two players.
 
 ## Technologies Used
 
 - C#: The primary language used for implementing the game logic.
-- .NET Framework: Provides libraries and tools for building and running the application.
+- .NET 7.0 Framework: Provides libraries and tools for building and running the application.
 
 ## Installation
 
@@ -21,7 +21,13 @@ ChessProject/bin/Debug/net7.0/chess.exe
 
 ## Features
 
-- Basic chess rules are implemented, including movement rules for each type of piece and special moves like castling and pawn promotion.
+- Basic chess rules are implemented:
+  - Piece movement
+  - Capturing
+  - Castling
+  - Promotion
+  - Check
+  - Checkmate
 - The game detects when a player's king is in check and prevents moves that would leave the king in check.
 - The game tracks and displays the current turn, player, and game board state.
 - When the game ends, the winner is declared, and the moves history is displayed.
