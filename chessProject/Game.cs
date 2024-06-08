@@ -98,11 +98,11 @@ namespace chess
         private void MakeMove()
         {
             ConsoleHelper.WriteInfo(InfoMessages.EnterMoveInfo);
-            string? moveInput = ReadMoveInput();
+            string? moveInput = ConsoleHelper.ReadMoveInput();
 
             string[] moveParts = moveInput.Split(' ');
 
-            if (moveParts.Length != 2 || !IsValidInput(moveParts[0]) || !IsValidInput(moveParts[1]))
+            if (moveParts.Length != 2 || !FormatHelper.IsValidFormatInput(moveParts[0]) || !FormatHelper.IsValidInput(moveParts[1]))
             {
                 ConsoleHelper.WriteError(ErrorMessages.MoveFormatInputError);
                 MakeMove();
@@ -156,21 +156,6 @@ namespace chess
                 }
             }
             ExecuteMove(move);
-        }
-
-        private string ReadMoveInput()
-        {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            string? moveInput = Console.ReadLine();
-            Console.ResetColor();
-            return moveInput;
-        }
-
-        private bool IsValidInput(string position)
-        {
-            return position.Length == 2 &&
-                   position[0] >= 'a' && position[0] <= 'h' &&
-                   position[1] >= '1' && position[1] <= '8';
         }
 
         private bool IsValidCastling(Move move)
@@ -241,6 +226,7 @@ namespace chess
             {
                 board.RemovePieceAt(end);
                 currentTurn.Player.Score++;
+                currentTurn.Move.SetPieceCaptured(pieceAtEnd);
             }
 
             if (pieceAtStart.Type == PieceType.Pawn)
@@ -283,14 +269,14 @@ namespace chess
             ConsoleHelper.WriteInfo(InfoMessages.PromotePawnOptions);
 
 
-            string? charPiece = Console.ReadLine();
+            string? charPiece = ConsoleHelper.ReadMoveInput();
             int pieceChoice;
 
             // Walidacja wejścia
             while (!int.TryParse(charPiece, out pieceChoice) || pieceChoice < 1 || pieceChoice > 4)
             {
                 Console.WriteLine("Invalid choice. Please enter a number between 1 and 4:");
-                charPiece = Console.ReadLine();
+                charPiece = ConsoleHelper.ReadMoveInput();
             }
 
             board.RemovePieceAt(pieceBeforePromotion.Coordinates);
@@ -340,7 +326,7 @@ namespace chess
             //Enemy piece is on start position
             if (piece == null || piece.Player != currentTurn.Player)
             {
-                ConsoleHelper.WriteError(ErrorMessages.EnemyPieceStartError(currentTurn));
+                //ConsoleHelper.WriteError(ErrorMessages.EnemyPieceStartError(currentTurn));
                 return false;
             }
 
@@ -363,17 +349,21 @@ namespace chess
             //Patch is obstruck
             if (!(piece is Knight) && !IsPathClear(start, end, board))
             {
-                ConsoleHelper.WriteError(ErrorMessages.InvalidPacthError);
+                //ConsoleHelper.WriteError(ErrorMessages.InvalidPacthError);
                 return false;
             }
 
-            //Other piece moved when king is in check
             Piece currentPlayerKing = board.GetPieceOfType(PieceType.King, currentTurn.Player);
+
+
+            /**
+            //Other piece moved when king is in check
             if (((King)currentPlayerKing).IsInCheck && piece != currentPlayerKing)
             {
-                ConsoleHelper.WriteError(ErrorMessages.NoKingInCheckMoveError);
+                //ConsoleHelper.WriteError(ErrorMessages.NoKingInCheckMoveError);
                 return false;
             }
+            */
 
             //Piece is move on king in check position
             bool prevKingState = ((King)currentPlayerKing).IsInCheck;
@@ -444,7 +434,7 @@ namespace chess
             // Get all pieces of the current player
             List<Piece> playerPieces = player == player1 ? board.WhitePieces : board.BlackPieces;
 
-            foreach (Piece piece in playerPieces)
+            foreach (Piece piece in playerPieces.ToList())
             {
                 Coordinates start = piece.Coordinates;
                 // Try moving to every position on the board
@@ -504,14 +494,15 @@ namespace chess
 
         private void PrintResult()
         {
-            Console.WriteLine("Game results");
+            Console.WriteLine("\n\nGame results");
             Console.WriteLine();
             Player winner = IsKingInCheck(player1) ? player2 : player1;
             Console.WriteLine($"Winner: {winner.Color}");
             Console.WriteLine("\nMoves History:");
             foreach (var turn in turnsHistory)
             {
-                Console.WriteLine($"{turn.Number}. {turn.Player.Color} {FormatMove(turn.Move)}");
+               //FormatHelper.FormatMove(turn.Move);
+                Console.WriteLine($"{turn.Number}. {FormatMove(turn.Move)}");
             }
         }
 

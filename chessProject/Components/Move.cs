@@ -17,5 +17,10 @@ namespace chess.Components
             PieceCaptured = pieceCaptured;
         }
 
+        public void SetPieceCaptured(Piece pieceCaptured)
+        {
+            PieceCaptured = pieceCaptured;
+        }
+
     }
 }

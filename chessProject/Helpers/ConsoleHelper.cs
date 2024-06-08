@@ -27,5 +27,13 @@
         {
             throw new NotImplementedException();
         }
+
+        public static string? ReadMoveInput()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            string? moveInput = Console.ReadLine();
+            Console.ResetColor();
+            return moveInput;
+        }
     }
 }
