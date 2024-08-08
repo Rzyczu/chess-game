@@ -4,7 +4,7 @@
 
 This is a simple implementation of a console chess game in C#. It provides a basic framework for playing chess with two players.
 
-![image](https://github.com/user-attachments/assets/3bc7b0b2-9114-45a1-b5f8-7b498fc97821)
+![image](https://github.com/user-attachments/assets/a6d386d7-5648-4c04-a4b5-63a3f5cd1a92)
 
 
 ## Technologies Used
