@@ -1,71 +1,112 @@
-# Chess Game
+# Chess – Console Chess Game (C# / .NET 7)
 
-## About
+A clean, object‑oriented **console chess engine + CLI** in **C#/.NET 7**. Implements core chess rules with per‑piece validation, **check detection**, **checkmate end condition**, **castling**, **pawn promotion**, path‑blocking logic, Unicode board rendering, and a simple algebraic‑style **move history**.  
 
-This is a simple implementation of a console chess game in C#. It provides a basic framework for playing chess with two players.
+---
 
-## Technologies Used
+## Tech Stack
 
-- C#: The primary language used for implementing the game logic.
-- .NET 7.0 Framework: Provides libraries and tools for building and running the application.
+- **Language/Runtime:** C# (NET 7.0)
+- **App type:** Console application
+- **Core modules:**
+  - `Components/` – board, coordinates, move, player, turn
+  - `Components/Pieces/` – King, Queen, Rook, Bishop, Knight, Pawn (per‑piece validation)
+  - `Helpers/` – console I/O, messages, enums, formatting helpers (algebraic ↔ coordinates)
+- **Entry point:** `chessProject/Program.cs`
 
-## Installation
+---
 
-1. Clone the repository to your local machine using Git:
+## Features (from code)
 
-``bash git clone https://github.com/rzyczu/chess-game.git
+- **Two‑player local play** (alternating turns, session in terminal).
+- **Board rendering** with Unicode piece symbols and ANSI colors.
+- **Per‑piece move validation** (`Piece.IsValidMove(...)`) and **path obstruction** checks for sliding pieces.
+- **Check** detection (`IsKingInCheck`) and **game over** when the checked side **cannot escape** (`CanEscapeCheck`).
+- **Castling** validation (king/rook not moved, empty path).
+- **Pawn promotion** with in‑console choice (Q/R/B/N) on reaching last rank.
+- **Move history** printed at the end (`FormatMove` → `e2-e4`, captures `x`, promotion `=Q`, piece letters `KQRBN`).
 
-## How to Play
+> **Known limitations (by design in this version):**
+> - **En passant** is not implemented.
+> - **Stalemate/draw** conditions are not explicitly handled (game ends on checkmate condition only).
+> - No persistence, AI, or network play.
 
-ChessProject/bin/Debug/net7.0/chess.exe
+---
 
-## Features
+## How to Run
 
-- Basic chess rules are implemented:
-  - Piece movement
-  - Capturing
-  - Castling
-  - Promotion
-  - Check
-  - Checkmate
-- The game detects when a player's king is in check and prevents moves that would leave the king in check.
-- The game tracks and displays the current turn, player, and game board state.
-- When the game ends, the winner is declared, and the moves history is displayed.
+**Prerequisites:** .NET 7 SDK
 
-## Project Structure
+```bash
+# from repository root
+dotnet run --project chessProject
+```
 
-The project follows a typical C# class library structure, organized into namespaces and classes:
+You should see the welcome banner, current player info, and a rendered board.
 
-### Namespaces
+---
 
-- **chess**: Contains the main classes related to the chess game.
-- **chess.Components**: Contains classes representing various components of the chess game, such as pieces, the game board, players, and turns.
-- **chess.Helpers**: Contains helper classes and enums used throughout the project.
-- **chess.Helpers.Enums**: Contains enums used to represent colors and types of chess pieces.
+## Input Format (CLI)
 
-### Classes and Enums
+- Moves are entered as **algebraic coordinates**: `"<from> <to>"` (space‑separated), e.g.:
+  - `e2 e4`, `b1 c3`
+- **Castling:** move the **king** two squares:
+  - White: `e1 g1` (king‑side), `e1 c1` (queen‑side)
+  - Black: `e8 g8`, `e8 c8`
+- **Promotion:** when a pawn reaches last rank, the app asks to pick a piece: `1‑4` (Q, R, B, N).
 
-- **Game**: Represents the main game logic, including initialization, game flow, and move execution.
-- **Coordinates**: Represents the coordinates on the game board.
-- **GameBoard**: Represents the game board and provides methods to add, remove, and access pieces on the board.
-- **Move**: Represents a move made by a player, including the start and end positions, the piece played, any captured piece, and any promotion.
-- **Player**: Represents a player in the game, including their color and score.
-- **Turn**: Represents a single turn in the game, including the player making the move and the move itself.
-- **Piece**: Represents a chess piece. It's an abstract class with subclasses for each type of piece (King, Queen, Rook, Bishop, Knight, Pawn).
-- **ColorType**: Enum representing the color of pieces (Black or White).
-- **PieceType**: Enum representing the type of chess pieces (King, Queen, Rook, Bishop, Knight, Pawn).
-- **ConsoleHelper**: Provides helper methods for writing messages to the console with different colors.
-- **ErrorMessages**: Contains static error messages used throughout the game.
-- **InfoMessages**: Contains static informational messages used throughout the game.
-- **WarningMessages**: Contains static warning messages used throughout the game.
-- **PieceSymbols**: Contains a dictionary mapping piece types to their corresponding Unicode symbols.
+**Invalid input** or illegal moves trigger descriptive error messages and a retry.
 
-### External Libraries
+---
 
-The project does not rely on any external libraries or dependencies.
+## Project Structure (high‑level)
+
+```
+chessProject/
+  Program.cs
+  Game.cs
+  Components/
+    GameBoard.cs
+    Coordinates.cs
+    Move.cs
+    Player.cs
+    Turn.cs
+    Pieces/
+      Piece.cs
+      Pawn.cs
+      Rook.cs
+      Knight.cs
+      Bishop.cs
+      Queen.cs
+      King.cs
+  Helpers/
+    ConsoleHelper.cs
+    Messages.cs
+    PieceSymbols.cs
+    FormatHelper.cs
+    Enums/
+      ChessColor.cs
+      PieceType.cs
+  UnitTests/ (sample, commented)
+```
+
+---
 
 ## Screen
 
 ![image](https://github.com/user-attachments/assets/a6d386d7-5648-4c04-a4b5-63a3f5cd1a92)
 
+---
 
+## Notes
+
+- Board coordinates are 0‑indexed internally; input/output uses **`a1..h8`** style mapping.
+- The engine prints **turn history** after the game finishes.
+- Customize console colors or symbols via `GameBoard.PrintBoard()` and `Helpers/PieceSymbols.cs`.
+- The code targets **.NET 7**; adjust `TargetFramework` if you need a different runtime.
+
+---
+
+## License
+
+MIT (see repository).
