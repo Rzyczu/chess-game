@@ -4,9 +4,6 @@
 
 This is a simple implementation of a console chess game in C#. It provides a basic framework for playing chess with two players.
 
-![image](https://github.com/user-attachments/assets/a6d386d7-5648-4c04-a4b5-63a3f5cd1a92)
-
-
 ## Technologies Used
 
 - C#: The primary language used for implementing the game logic.
@@ -66,3 +63,9 @@ The project follows a typical C# class library structure, organized into namespa
 ### External Libraries
 
 The project does not rely on any external libraries or dependencies.
+
+## Screen
+
+![image](https://github.com/user-attachments/assets/a6d386d7-5648-4c04-a4b5-63a3f5cd1a92)
+
+
